@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Title and description are filled from content.js -->
+  <title></title>
+  <meta name="description" content="" />
+  <link rel="icon" href="assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Preloader: the logo assembles along its own slash -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader-logo">
+      <img src="assets/logo.png" alt="" class="half half-top" />
+      <img src="assets/logo.png" alt="" class="half half-bot" />
+    </div>
+    <div class="loader-bar"><span></span></div>
+  </div>
+
+  <div class="cursor" id="cursor" aria-hidden="true"></div>
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <canvas id="field" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="#top" class="nav-brand" id="brand">
+      <img src="assets/logo.png" alt="" />
+      <span data-slot="brand"></span>
+    </a>
+    <nav class="nav-links" id="navLinks"></nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span></button>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <!-- 1. Floating logo, centred -->
+      <div class="hero-visual" id="heroVisual">
+        <!-- 3D tech-logo orbits (filled by js/render.js, animated by js/orbit.js) -->
+        <div class="orbit3d" id="orbit3d" aria-hidden="true"></div>
+        <div class="logo-glow"></div>
+        <div class="logo-float">
+          <div class="logo-stage" id="logoStage">
+            <img src="assets/logo.png" alt="" class="logo-main half-top" id="heroLogo" />
+            <img src="assets/logo.png" alt="" class="logo-main half-bot" />
+            <div class="slash-flash"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Name, then everything else -->
+      <div class="hero-text">
+        <h1 class="hero-title">
+          <span class="line"><span class="word" data-scramble data-slot="hero.firstName"></span></span>
+          <span class="line"><span class="word grad" data-scramble data-slot="hero.lastName"></span></span>
+        </h1>
+        <ul class="hero-keys reveal" id="heroKeys"></ul>
+        <div class="hero-cta reveal">
+          <a class="btn btn-primary magnetic" id="ctaPrimary"><span></span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-light magnetic" id="ctaSecondary"><span></span></a>
+        </div>
+        <p class="eyebrow reveal"><span class="pulse"></span><span data-slot="hero.status"></span></p>
+      </div>
+
+    </section>
+
+    <div class="slash-divider" aria-hidden="true"></div>
+
+    <!-- ABOUT -->
+    <section id="about" class="section band">
+      <div class="section-head reveal" data-head="about"></div>
+      <div class="about-grid">
+        <div class="about-copy reveal" id="aboutCopy"></div>
+        <div class="stats" id="stats"></div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="section">
+      <div class="section-head reveal" data-head="projects"></div>
+      <div class="carousel reveal" id="projectCarousel">
+        <div class="carousel-track" id="projectTrack"></div>
+        <div class="carousel-controls">
+          <button class="carousel-btn" data-dir="-1" aria-label="Previous project"><svg viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
+          <div class="carousel-dots"></div>
+          <button class="carousel-btn" data-dir="1" aria-label="Next project"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience" class="section">
+      <div class="section-head reveal" data-head="experience"></div>
+      <div class="timeline" id="timeline"></div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="section band">
+      <div class="section-head reveal" data-head="skills"></div>
+      <div class="toolkit reveal" id="toolkit" data-glow></div>
+      <p class="tk-more reveal" data-slot="skills.more"></p>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section contact">
+      <div class="contact-bg-logo" aria-hidden="true"><img src="assets/logo.png" alt="" /></div>
+      <h2 class="contact-title reveal"><span data-slot="contact.titleLine1"></span><br /><span class="grad" data-slot="contact.titleLine2"></span></h2>
+      <a class="contact-mail magnetic reveal" id="contactMail"></a>
+      <div class="socials reveal" id="socials"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <img src="assets/logo.png" alt="" />
+    <span id="footerText"></span>
+    <a href="#top" data-slot="footer.backToTop"></a>
+  </footer>
+
+  <!-- 1. Editable content -->
+  <script src="content.js"></script>
+  <!-- 2. Helpers + feature modules (each registers itself on window.App) -->
+  <script src="js/utils.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/loader.js"></script>
+  <script src="js/cursor.js"></script>
+  <script src="js/particles.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/terminal.js"></script>
+  <script src="js/reveal.js"></script>
+  <script src="js/carousel.js"></script>
+  <script src="js/interactions.js"></script>
+  <script src="js/orbit.js"></script>
+  <!-- 3. Boot: render content, then start features -->
+  <script src="js/main.js"></script>
+</body>
+</html>
