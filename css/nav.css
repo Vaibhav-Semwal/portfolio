@@ -12,8 +12,24 @@
   border-bottom-color: var(--line);
   padding-top: 12px; padding-bottom: 12px;
 }
-.nav-brand { display: flex; align-items: center; gap: 12px; font-family: var(--f-mono); font-size: 14px; }
-.nav-brand img { width: 36px; transition: transform .5s var(--ease); }
+.nav-brand { display: flex; align-items: center; gap: 12px; font-family: var(--f-mono); font-size: 14px; white-space: nowrap; }
+.nav-brand .brand-mark {
+  width: 36px; flex: none; transform-origin: 50% 85%; /* pivots near the V's point */
+  transition: transform .5s var(--ease);
+}
+
+/* Jiggle on click (js/brand.js adds .jiggle): a quick wobble that settles. */
+.nav-brand.jiggle .brand-mark { animation: jiggle .85s ease-out; }
+@keyframes jiggle {
+  0%   { rotate: 0deg;   scale: 1; }
+  10%  { rotate: -20deg; scale: 1.18; }
+  24%  { rotate: 16deg;  scale: 1.14; }
+  38%  { rotate: -11deg; scale: 1.08; }
+  52%  { rotate: 7deg;   scale: 1.04; }
+  66%  { rotate: -4deg;  scale: 1.02; }
+  82%  { rotate: 2deg;   scale: 1; }
+  100% { rotate: 0deg;   scale: 1; }
+}
 .nav-brand b { color: var(--purple-hi); }
 .nav-contacts { display: flex; align-items: center; gap: 8px; }
 .nav-contact {
@@ -34,6 +50,6 @@
 
 /* Hover-only effects */
 @media (hover: hover) {
-  .nav-brand:hover img { transform: rotate(-8deg) scale(1.08); }
+  .nav-brand:hover .brand-mark { transform: rotate(-8deg) scale(1.08); }
   .nav-contact:hover { color: var(--text); border-color: var(--purple); background: rgba(124, 51, 190, .16); }
 }

@@ -17,5 +17,6 @@
   App.carousel.init();
   App.interactions.init();
   App.logoSecret.init();
+  App.brand.init();
   App.orbit.init();
 })();

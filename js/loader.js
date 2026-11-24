@@ -3,11 +3,15 @@
   const { $, $$, prefs } = App.utils;
   const GLYPHS = "!<>-_\\/[]{}=+*^?#01VS";
 
+  /* Letters resolve left to right out of random glyphs. Safe to call again mid-scramble:
+     the original text is remembered and the older run stops. */
   function scramble(el) {
-    const final = el.textContent;
+    const final = (el.dataset.final ??= el.textContent);
+    const run = (el._scrambleRun = (el._scrambleRun || 0) + 1);
     const total = 26;
     let frame = 0;
     const tick = () => {
+      if (el._scrambleRun !== run) return;
       el.textContent = final
         .split("")
         .map((ch, i) => (frame / total > i / final.length ? ch : GLYPHS[(Math.random() * GLYPHS.length) | 0]))
@@ -43,5 +47,5 @@
     setTimeout(start, 4000); // safety net if an asset hangs
   }
 
-  App.loader = { init };
+  App.loader = { init, scramble };
 })();

@@ -11,7 +11,7 @@
     $$("[data-slot]").forEach((el) => {
       const key = el.dataset.slot;
       if (key === "brand") {
-        el.innerHTML = `${escape(c.brand.first)}<b>.</b>${escape(c.brand.last)}`;
+        el.innerHTML = `<span class="brand-word">${escape(c.brand.first)}</span><b>.</b><span class="brand-word">${escape(c.brand.last)}</span>`;
         return;
       }
       const v = get(c, key);
