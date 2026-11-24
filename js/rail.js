@@ -1,65 +1,70 @@
 /* Side scroll slider: the thumb tracks page position, can be dragged to scrub,
    and each stop jumps to its section. Arrow keys on the thumb step between sections. */
 (() => {
-  const { $, $$ } = App.utils;
+  const { $, $$, perFrame, onScroll } = App.utils;
 
   function init() {
     const rail = $("#rail"), track = $("#railTrack"), fill = $("#railFill"), thumb = $("#railThumb");
     if (!rail) return;
     const stops = $$(".rail-stop", rail).map((el) => ({ el, target: document.getElementById(el.dataset.target), pct: 0 }));
-
+    const clamp01 = (v) => Math.max(0, Math.min(1, v));
     const maxScroll = () => Math.max(1, document.documentElement.scrollHeight - innerHeight);
-    const sectionTop = (s) => (s.target.id === "top" ? 0 : s.target.getBoundingClientRect().top + scrollY - innerHeight * 0.15);
+    let active = -1, idleTimer;
 
     /* Place each stop where its section starts, as a share of the scrollable height. */
     function layout() {
       const max = maxScroll();
       stops.forEach((s) => {
-        s.pct = Math.max(0, Math.min(1, sectionTop(s) / max));
+        const top = s.target.id === "top" ? 0 : s.target.getBoundingClientRect().top + scrollY - innerHeight * 0.15;
+        s.pct = clamp01(top / max);
         s.el.style.top = s.pct * 100 + "%";
       });
-      update(false);
+      update();
     }
 
-    let idleTimer;
-    function update(flash = true) {
-      const pct = Math.max(0, Math.min(1, scrollY / maxScroll()));
+    function update() {
+      const pct = clamp01(scrollY / maxScroll());
       thumb.style.top = pct * 100 + "%";
       fill.style.transform = `scaleY(${pct})`;
       thumb.setAttribute("aria-valuenow", Math.round(pct * 100));
 
-      let active = 0;
-      stops.forEach((s, i) => { if (pct + 0.002 >= s.pct) active = i; });
+      let now = 0;
+      stops.forEach((s, i) => { if (pct + 0.002 >= s.pct) now = i; });
+      if (now === active) return; // only touch the stop classes when the section changes
+      active = now;
       stops.forEach((s, i) => {
         s.el.classList.toggle("active", i === active);
         s.el.classList.toggle("passed", i < active);
       });
       thumb.setAttribute("aria-valuetext", stops[active] ? stops[active].el.getAttribute("aria-label") : "");
+    }
 
-      if (!flash) return;
+    // While scrolling, the active label stays lit briefly (.moving).
+    onScroll(() => {
+      update();
       rail.classList.add("moving");
       clearTimeout(idleTimer);
       idleTimer = setTimeout(() => rail.classList.remove("moving"), 900);
-    }
+    });
 
     const scrollToPct = (pct, smooth) =>
-      scrollTo({ top: Math.max(0, Math.min(1, pct)) * maxScroll(), behavior: smooth ? "smooth" : "instant" });
+      scrollTo({ top: clamp01(pct) * maxScroll(), behavior: smooth ? "smooth" : "instant" });
 
-    /* Dragging anywhere on the track scrubs the page. Clicks on stops fall through to their links. */
+    /* Dragging anywhere on the track scrubs the page. Taps on stops fall through to their links. */
     let dragging = false;
-    const pctFromEvent = (e) => {
+    const scrub = perFrame((y) => {
       const r = track.getBoundingClientRect();
-      return (e.clientY - r.top) / r.height;
-    };
+      scrollToPct((y - r.top) / r.height, false);
+    });
     track.addEventListener("pointerdown", (e) => {
       if (e.target.closest(".rail-stop")) return;
       e.preventDefault();
       dragging = true;
       track.setPointerCapture(e.pointerId);
       rail.classList.add("dragging");
-      scrollToPct(pctFromEvent(e), false);
+      scrub(e.clientY);
     });
-    track.addEventListener("pointermove", (e) => { if (dragging) scrollToPct(pctFromEvent(e), false); });
+    track.addEventListener("pointermove", (e) => { if (dragging) scrub(e.clientY); });
     const endDrag = () => { dragging = false; rail.classList.remove("dragging"); };
     track.addEventListener("pointerup", endDrag);
     track.addEventListener("pointercancel", endDrag);
@@ -83,10 +88,8 @@
       if (next) scrollToPct(next.pct, true);
     });
 
-    addEventListener("scroll", () => update(), { passive: true });
-    addEventListener("resize", layout);
-    addEventListener("load", layout);
-    new ResizeObserver(layout).observe(document.body);
+    // Re-measure whenever the page's size changes (images loading, fonts, rotation).
+    new ResizeObserver(perFrame(layout)).observe(document.body);
     layout();
   }
 

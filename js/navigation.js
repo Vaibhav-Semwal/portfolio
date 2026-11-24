@@ -1,21 +1,19 @@
-/* Sticky nav state and timeline fill. */
+/* Scroll-driven page state: the top bar darkens once scrolled, and the experience timeline fills. */
 (() => {
-  const { $ } = App.utils;
+  const { $, onScroll } = App.utils;
 
   function init() {
     const nav = $("#nav"), timeline = $("#timeline");
 
-    const onScroll = () => {
-      const y = scrollY;
-      nav.classList.toggle("scrolled", y > 30);
-      if (timeline) {
-        const r = timeline.getBoundingClientRect();
-        const pct = Math.max(0, Math.min(1, (innerHeight * 0.6 - r.top) / r.height));
-        timeline.style.setProperty("--tl", pct * 100 + "%");
-      }
+    const update = () => {
+      nav.classList.toggle("scrolled", scrollY > 30);
+      if (!timeline) return;
+      const r = timeline.getBoundingClientRect();
+      const pct = Math.max(0, Math.min(1, (innerHeight * 0.6 - r.top) / r.height));
+      timeline.style.setProperty("--tl", pct * 100 + "%");
     };
-    addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
+    onScroll(update);
+    update();
   }
 
   App.navigation = { init };

@@ -1,0 +1,75 @@
+/* Design tokens, reset, page-wide layers and motion preferences.
+   Palette taken from the logo: black · dark blue · purple. */
+:root {
+  --black: #050509;
+  --surface: #0b0c14;
+  --surface-2: #10121d;
+  --line: #1c1f33;
+  --line-2: #2a2d48;
+
+  --blue: #033580;        /* logo base navy */
+  --blue-mid: #1d3a9e;
+  --indigo: #3b35a0;      /* logo mid */
+  --purple: #7c33be;      /* logo upper */
+  --purple-hi: #b52fd8;   /* logo tip — accent only */
+
+  --white: #f6f5fa;      /* soft white used for light moments */
+  --text: #ecebf5;
+  --muted: #8d8ba6;
+  --dim: #5b5a73;
+
+  --f-display: "Space Grotesk", system-ui, sans-serif;
+  --f-body: "Inter", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --gutter: clamp(16px, 5vw, 72px);
+  --ease: cubic-bezier(.2, .8, .2, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: none;            /* hide the browser scrollbar: the side slider replaces it */
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
+body {
+  margin: 0;
+  background: var(--black);
+  color: var(--text);
+  font-family: var(--f-body);
+  font-size: 16px;
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+body.loading { overflow: hidden; }
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--purple); color: #fff; }
+
+/* Cursor: a classic arrow in the logo's colours. White with a purple edge normally;
+   it fills purple over anything clickable. Falls back to the system cursor if images are off. */
+html { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M4 2.5v17l4.6-4.3 3 6.6 2.9-1.3-3-6.5h6.3z' fill='%23f6f5fa' stroke='%237c33be' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E") 4 3, auto; }
+a, button, [role="slider"], .rail-track, .logo-stage { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M4 2.5v17l4.6-4.3 3 6.6 2.9-1.3-3-6.5h6.3z' fill='%23b52fd8' stroke='%23f6f5fa' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E") 4 3, pointer; }
+
+/* ---------- Ambient layers ---------- */
+#field, #sky {
+  position: fixed; inset: 0; z-index: 0; width: 100%; height: 100%;
+  pointer-events: none;
+}
+.grain {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: .05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+main, .footer, .nav { position: relative; z-index: 2; }
+
+/* The logo's own diagonal slash (measured from the artwork). Used by the loader and the hero logo. */
+.half-top { clip-path: polygon(0 0, 100% 0, 100% 23%, 0 67.6%); }
+.half-bot { clip-path: polygon(0 67.6%, 100% 23%, 100% 100%, 0 100%); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
+  .hero-title .word { transform: none; }
+}

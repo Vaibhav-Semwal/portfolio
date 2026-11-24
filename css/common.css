@@ -1,0 +1,99 @@
+/* Shared building blocks: sections, headings, small text pieces, reveal, card glow, purple bands. */
+.section { padding: clamp(100px, 13vw, 180px) var(--gutter) 0; max-width: 1320px; margin: 0 auto; }
+.section-head { display: flex; align-items: baseline; gap: 18px; margin-bottom: 56px; }
+.section-head h2 {
+  font-family: var(--f-display); font-weight: 600; letter-spacing: -.03em;
+  font-size: clamp(36px, 6vw, 72px); line-height: 1; margin: 0;
+}
+.section-head h2 em { font-style: normal; color: var(--purple); }
+.section-head::after { content: ""; flex: 1; height: 1px; background: var(--line); align-self: center; margin-left: 12px; }
+/* smaller heading for a block inside a section (e.g. the stack inside About) */
+.sub-head { margin-bottom: 28px; }
+.sub-head h2 { font-size: clamp(26px, 3.2vw, 40px); }
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--f-mono); font-size: 12px; letter-spacing: .06em; color: var(--muted);
+  border: 1px solid var(--line-2); padding: 7px 14px; border-radius: 99px; margin: 0;
+  background: rgba(11, 12, 20, .6);
+}
+.pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--purple-hi); position: relative; }
+.pulse::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--purple-hi); animation: ping 2s infinite; }
+@keyframes ping { to { transform: scale(3); opacity: 0; } }
+
+.grad { color: var(--purple); }
+.muted { color: var(--muted); margin: 6px 0 0; }
+.hl { color: var(--text); border-bottom: 1px solid var(--purple); }
+.eyebrow { max-width: 100%; }
+@media (max-width: 420px) { .eyebrow { font-size: 10.5px; letter-spacing: 0; padding: 7px 12px; } }
+
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 0; }
+.tags span {
+  font-family: var(--f-mono); font-size: 12px; color: var(--muted);
+  padding: 5px 11px; border: 1px solid var(--line-2); border-radius: 6px;
+}
+.bullets { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 10px; }
+.bullets li { position: relative; padding-left: 22px; color: #c6c4d8; }
+.bullets li::before {
+  content: ""; position: absolute; left: 0; top: .72em; width: 10px; height: 2px;
+  background: var(--purple); transform: skewY(-24deg);
+}
+.bullets b { color: var(--text); font-weight: 600; }
+
+/* Reveal on scroll */
+.reveal { opacity: 0; transform: translateY(34px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+.reveal.in { opacity: 1; transform: none; }
+
+/* Mouse-follow glow on cards (solid purple, very soft) */
+[data-glow] { position: relative; isolation: isolate; }
+[data-glow]::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: -1; pointer-events: none;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(124, 51, 190, .16), transparent 60%);
+  opacity: 0; transition: opacity .4s;
+}
+[data-glow]:hover::before { opacity: 1; }
+/* 3D tilt is mouse-only (js/interactions.js); no layers are promoted on touch screens */
+@media (hover: hover) and (pointer: fine) {
+  .tilt { transform-style: preserve-3d; will-change: transform; }
+}
+
+/* ---------- Purple band ----------
+   Any section with class "band" sits on a deep purple wash that grows out of
+   the black background and sinks back into it. Low contrast on purpose:
+   the colours flow rather than switch. Text stays light, as elsewhere. */
+.band {
+  --band: #1c1233;          /* deep logo-purple, only a few steps above black */
+  --fade: 260px;            /* how tall each black <-> purple blend is */
+  --surface: #221740;
+  --surface-2: #281b4b;
+  --line: #34265a;
+  --line-2: #45346f;
+  --muted: #a49dc2;
+  position: relative; isolation: isolate;
+  padding-top: clamp(220px, 20vw, 290px);
+  padding-bottom: clamp(200px, 19vw, 270px);
+}
+.band::before {
+  content: ""; position: absolute; z-index: -1; top: 0; bottom: 0;
+  left: 50%; width: 100vw; transform: translateX(-50%);
+  background:
+    radial-gradient(50% 45% at 15% 40%, rgba(124, 51, 190, .22), transparent 70%),
+    radial-gradient(45% 40% at 85% 60%, rgba(29, 58, 158, .18), transparent 70%),
+    linear-gradient(to bottom,
+      transparent 0,
+      var(--band) var(--fade),
+      var(--band) calc(100% - var(--fade)),
+      transparent 100%);
+}
+/* brighter purple accents so they still read on the purple wash */
+.band .section-head h2 em, .band .grad, .band .stat span, .band .about-copy b { color: #a865e6; }
+.band .stat, .band .contact-card { box-shadow: 0 14px 34px -22px rgba(0, 0, 0, .7); }
+.band .toolkit { box-shadow: 0 20px 44px -28px rgba(0, 0, 0, .7); }
+
+/* Grid / flex children may shrink below their content width */
+.hero > *, .about-grid > *, .project > *, .stats > *, .timeline > *, .tk-row > * { min-width: 0; }
+
+@media (max-width: 760px) {
+  .band { --fade: 160px; padding-top: 180px; padding-bottom: 160px; }
+  .section-head::after { display: none; }
+}

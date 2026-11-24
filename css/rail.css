@@ -1,0 +1,65 @@
+/* Side slider: scroll position, section stops, draggable thumb (js/rail.js). */
+.rail {
+  position: fixed; z-index: 55; top: 50%; right: clamp(10px, 2vw, 30px);
+  height: min(58vh, 480px); width: 30px;
+  transform: translateY(-50%);
+}
+.rail-track { position: absolute; inset: 0; touch-action: none; }
+/* the line itself */
+.rail-track::before, .rail-fill {
+  content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; margin-left: -1px; border-radius: 2px;
+}
+.rail-track::before { background: var(--line-2); opacity: .7; transition: opacity .3s; }
+.rail-fill {
+  background: linear-gradient(180deg, var(--blue-mid), var(--purple), var(--purple-hi));
+  transform-origin: top; transform: scaleY(0);
+  box-shadow: 0 0 10px rgba(124, 51, 190, .5);
+}
+.rail-stops { position: absolute; inset: 0; pointer-events: none; }
+.rail-stop {
+  position: absolute; left: 50%; width: 22px; height: 22px; margin: -11px 0 0 -11px;
+  display: grid; place-items: center; pointer-events: auto;
+}
+.rail-stop::before {
+  content: ""; width: 7px; height: 7px; transform: rotate(45deg);
+  background: var(--black); border: 1px solid var(--dim);
+  transition: background .3s var(--ease), border-color .3s, transform .3s var(--ease), box-shadow .3s;
+}
+.rail-stop.passed::before { background: var(--indigo); border-color: var(--indigo); }
+.rail-stop.active::before { background: var(--purple-hi); border-color: var(--purple-hi); box-shadow: 0 0 12px var(--purple-hi); transform: rotate(45deg) scale(1.25); }
+.rail-label {
+  position: absolute; right: 26px; top: 50%; transform: translate(6px, -50%);
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; white-space: nowrap;
+  color: var(--muted); opacity: 0; pointer-events: none;
+  padding: 3px 9px; border-radius: 4px; background: rgba(5, 5, 9, .7);
+  transition: opacity .35s var(--ease), transform .35s var(--ease), color .3s;
+}
+.rail-stop.active .rail-label {
+  color: var(--text); font-family: var(--f-display); font-size: 22px; font-weight: 600;
+  letter-spacing: .04em; right: 30px; opacity: 1; transform: translate(0, -50%);
+}
+.rail:hover .rail-label, .rail.dragging .rail-label,
+.rail.moving .rail-stop.active .rail-label, .rail-stop:focus-visible .rail-label { opacity: 1; transform: translate(0, -50%); }
+.rail-thumb {
+  position: absolute; left: 50%; top: 0; width: 6px; height: 28px; margin: -14px 0 0 -3px; border-radius: 6px;
+  background: linear-gradient(180deg, var(--purple-hi), var(--purple));
+  box-shadow: 0 0 0 4px rgba(124, 51, 190, .15), 0 0 16px rgba(181, 47, 216, .55);
+  transition: width .3s var(--ease), margin .3s var(--ease), box-shadow .3s;
+  pointer-events: none; outline: none;
+}
+.rail:hover .rail-track::before { opacity: 1; }
+.rail:hover .rail-thumb, .rail.dragging .rail-thumb, .rail-thumb:focus-visible {
+  width: 10px; margin-left: -5px;
+  box-shadow: 0 0 0 6px rgba(124, 51, 190, .2), 0 0 22px rgba(181, 47, 216, .75);
+}
+
+@media (max-width: 760px) {
+  .rail { right: 4px; height: min(46vh, 360px); }
+  .rail-label { display: none; }
+  .rail-stop.active .rail-label { display: block; font-size: 15px; right: 22px; }
+}
+
+/* Hover-only effects */
+@media (hover: hover) {
+  .rail-stop:hover::before { border-color: var(--text); transform: rotate(45deg) scale(1.4); }
+}

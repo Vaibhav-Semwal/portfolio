@@ -1,0 +1,65 @@
+/* Contact card (inside About, styled like the stat cards), its buttons, and the footer. */
+.contact-card {
+  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 22px 40px;
+  margin-top: 14px; padding: 28px 30px; border-radius: 18px;
+  background: var(--surface); border: 1px solid var(--line);
+  position: relative; overflow: hidden; isolation: isolate;
+  transition: border-color .3s;
+}
+/* the logo's slash, cut across the card like the mini tiles */
+.contact-card::after {
+  content: ""; position: absolute; z-index: -1; right: -6%; top: 50%; width: 46%; height: 2px;
+  background: var(--purple); opacity: .35; transform: rotate(-19deg);
+}
+.contact-title {
+  font-family: var(--f-display); font-weight: 600; letter-spacing: -.01em; line-height: 1.3;
+  font-size: clamp(22px, 2.6vw, 32px); margin: 0;
+}
+.contact-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 14px; }
+.contact-mail {
+  display: inline-block; font-family: var(--f-display); font-size: clamp(15px, 1.5vw, 18px);
+  padding: 13px 26px; border: 1px solid var(--line-2); border-radius: 99px;
+  transition: border-color .4s var(--ease), background-color .4s var(--ease), color .4s var(--ease);
+  word-break: break-all;
+}
+.contact-mail {
+  background: var(--white); color: var(--black); border-color: var(--white);
+  position: relative; overflow: hidden; isolation: isolate;
+}
+.contact-mail:hover { border-color: var(--purple); }
+.socials { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 6px 24px; }
+.socials a { display: inline-block; color: var(--muted); font-size: 14px; position: relative; padding: 4px 0; transition: color .35s var(--ease); }
+.socials a::after { content: ""; position: absolute; left: 0; bottom: 0; width: 100%; height: 1px; background: var(--purple); transform: scaleX(0); transition: transform .35s var(--ease); }
+.socials a:hover { color: var(--text); }
+.socials a:hover::after { transform: scaleX(1); }
+
+@media (hover: hover) {
+  .contact-card:hover { border-color: var(--purple); }
+}
+@media (max-width: 760px) {
+  .contact-card { grid-template-columns: 1fr; text-align: center; padding: 26px 22px; }
+  .contact-actions { align-items: center; }
+  .socials { justify-content: center; }
+}
+
+.footer {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  padding: 28px var(--gutter); border-top: 1px solid var(--line); color: var(--dim); font-size: 13px;
+}
+.footer img { width: 28px; }
+.to-top {
+  display: inline-flex; align-items: center; gap: 10px; height: 44px; padding: 0 12px 0 18px;
+  border: 1px solid var(--line-2); border-radius: 99px; background: var(--surface);
+  font-family: var(--f-mono); font-size: 12px; letter-spacing: .06em; color: var(--muted);
+  transition: color .3s var(--ease), border-color .3s var(--ease), background-color .3s var(--ease);
+}
+.to-top svg {
+  width: 26px; height: 26px; padding: 5px; border-radius: 50%; flex: none;
+  background: var(--purple); fill: none; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+}
+@media (max-width: 760px) {
+  .footer { flex-direction: column; justify-content: center; text-align: center; gap: 14px; padding-bottom: 36px; }
+}
+@media (hover: hover) {
+  .to-top:hover { color: var(--text); border-color: var(--purple); background: rgba(124, 51, 190, .16); }
+}

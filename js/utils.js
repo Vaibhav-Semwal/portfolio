@@ -38,5 +38,29 @@ window.App = window.App || {};
     return el;
   };
 
-  App.utils = { $, $$, prefs, escape, format, get, h };
+  /* Wraps a handler for a busy event (scroll, pointer, resize) so it runs at most once per frame. */
+  const perFrame = (fn) => {
+    let queued = false;
+    return (...args) => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => { queued = false; fn(...args); });
+    };
+  };
+
+  /* Window scroll listener, batched to one call per frame. */
+  const onScroll = (fn) => addEventListener("scroll", perFrame(fn), { passive: true });
+
+  /* Resize listener that only fires when the WIDTH changes. Phones fire "resize" every time
+     the address bar shows or hides; that only changes the height and needs no re-layout. */
+  const onWidthChange = (fn) => {
+    let w = innerWidth;
+    addEventListener("resize", perFrame(() => {
+      if (innerWidth === w) return;
+      w = innerWidth;
+      fn();
+    }));
+  };
+
+  App.utils = { $, $$, prefs, escape, format, get, h, perFrame, onScroll, onWidthChange };
 })();

@@ -9,7 +9,6 @@
   App.render.all(content);
 
   App.loader.init();
-  App.cursor.init();
   App.particles.init();
   App.navigation.init();
   App.rail.init();
@@ -17,5 +16,6 @@
   App.reveal.init();
   App.carousel.init();
   App.interactions.init();
+  App.logoSecret.init();
   App.orbit.init();
 })();

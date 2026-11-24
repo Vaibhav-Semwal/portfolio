@@ -1,29 +1,18 @@
-/* A rare shooting star streaks across the sky at long, random intervals.
-   Runs on its own canvas, so it costs nothing between events. */
+/* A shooting star streaks across the sky at random intervals.
+   Its canvas only holds pixels while a star is flying, so it costs no memory in between. */
 (() => {
   const { $, prefs } = App.utils;
   const FIRST_DELAY = [6000, 12000];   // ms before the first one
-  const INTERVAL = [15000, 35000];      // ms between later ones
+  const INTERVAL = [15000, 35000];     // ms between later ones
   const rand = (a, b) => a + Math.random() * (b - a);
 
   function init() {
     if (prefs.reduceMotion) return;
     const canvas = $("#sky");
     const ctx = canvas.getContext("2d");
-    let timer;
-
-    function resize() {
-      const dpr = Math.min(devicePixelRatio || 1, 2);
-      canvas.width = innerWidth * dpr;
-      canvas.height = innerHeight * dpr;
-      canvas.style.width = innerWidth + "px";
-      canvas.style.height = innerHeight + "px";
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
 
     function schedule(range) {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
+      setTimeout(() => {
         // Never fire while the tab is hidden: the visitor would miss it.
         if (document.hidden) return schedule([4000, 9000]);
         shoot();
@@ -33,7 +22,12 @@
 
     function shoot() {
       const W = innerWidth, H = innerHeight;
-      // Start somewhere along the top / upper side, fall diagonally across.
+      const dpr = Math.min(devicePixelRatio || 1, prefs.finePointer ? 2 : 1.5);
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      // Start along the top, fall diagonally across from either side.
       const fromLeft = Math.random() < 0.5;
       const angle = rand(0.35, 0.65); // radians below horizontal
       const sx = fromLeft ? rand(-0.05, 0.55) * W : rand(0.45, 1.05) * W;
@@ -46,8 +40,8 @@
 
       (function frame(now) {
         const t = Math.min(1, (now - t0) / duration);
-        const travel = (1 - Math.pow(1 - t, 2)) * dist;      // ease-out
-        const fade = t < 0.15 ? t / 0.15 : 1 - Math.pow((t - 0.15) / 0.85, 2);
+        const travel = (1 - (1 - t) ** 2) * dist;                 // ease-out
+        const fade = t < 0.15 ? t / 0.15 : 1 - ((t - 0.15) / 0.85) ** 2;
         const hx = sx + dx * travel, hy = sy + dy * travel;
         const len = tailLen * (0.4 + 0.6 * Math.min(1, t * 3));
         const tx = hx - dx * len, ty = hy - dy * len;
@@ -70,15 +64,12 @@
         glow.addColorStop(1, "rgba(124,51,190,0)");
         ctx.fillStyle = glow;
         ctx.beginPath(); ctx.arc(hx, hy, 20, 0, Math.PI * 2); ctx.fill();
-        ctx.globalAlpha = 1;
 
         if (t < 1) requestAnimationFrame(frame);
-        else ctx.clearRect(0, 0, W, H);
+        else canvas.width = canvas.height = 0; // free the pixels until the next star
       })(t0);
     }
 
-    resize();
-    addEventListener("resize", resize);
     schedule(FIRST_DELAY);
     App.shootingStar.shoot = shoot; // handy for testing from the console
   }

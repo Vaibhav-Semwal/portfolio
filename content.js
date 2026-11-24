@@ -24,10 +24,10 @@ window.CONTENT = {
 
   nav: [
     { id: "about", label: "About" },
-    { id: "projects", label: "Projects" },
-    { id: "experience", label: "Experience" },
-    { id: "skills", label: "Skills" },
     { id: "contact", label: "Contact" },
+    { id: "skills", label: "Skills" },
+    { id: "experience", label: "Experience" },
+    { id: "projects", label: "Projects" },
   ],
 
   hero: {
@@ -226,6 +226,6 @@ window.CONTENT = {
 
   footer: {
     text: "Vaibhav Semwal · Delhi, India", // the © year is added automatically
-    backToTop: "Back to top ↑",
+    backToTop: "Back to top",
   },
 };

@@ -1,0 +1,46 @@
+/* Skills toolkit rows, pills and the "and much more..." note (inside About). */
+.about-skills { margin-top: clamp(64px, 8vw, 96px); }
+.toolkit {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 22px;
+  padding: 4px clamp(18px, 3vw, 28px);
+}
+.tk-row {
+  display: grid; grid-template-columns: 180px 1fr; gap: 16px; align-items: center;
+  padding: 11px 0; border-bottom: 1px solid var(--line);
+}
+.tk-row:last-child { border-bottom: 0; }
+.tk-more {
+  margin: 14px 6px 0; text-align: right;
+  font-family: var(--f-mono); font-size: clamp(15px, 1.6vw, 19px); letter-spacing: .06em; color: var(--muted);
+}
+.tk-more::before { content: "/ "; color: var(--purple); }
+/* trailing dots light up one after another, like a typing indicator */
+.tk-more .dots { display: inline-flex; margin-left: 1px; }
+.tk-more .dots i {
+  font-style: normal; display: inline-block; color: var(--purple-hi);
+  opacity: .2; animation: dotTrail 1.4s ease-in-out infinite;
+}
+.tk-more .dots i:nth-child(2) { animation-delay: .2s; }
+.tk-more .dots i:nth-child(3) { animation-delay: .4s; }
+@keyframes dotTrail {
+  0%, 60%, 100% { opacity: .2; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-3px); }
+}
+.tk-label { display: flex; align-items: center; gap: 10px; }
+.tk-label h3 { font-family: var(--f-display); font-size: 16px; font-weight: 500; margin: 0; }
+.skill-icon {
+  width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; flex: none;
+  background: rgba(124, 51, 190, .12); border: 1px solid rgba(124, 51, 190, .35);
+}
+.tk-row:nth-child(even) .skill-icon { background: rgba(3, 53, 128, .25); border-color: rgba(60, 100, 200, .35); }
+.skill-icon svg { width: 14px; height: 14px; fill: none; stroke: var(--text); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.pills span {
+  font-size: 12.5px; padding: 4px 11px; border-radius: 99px; background: var(--surface-2); border: 1px solid var(--line);
+  color: #c6c4d8;
+}
+
+@media (max-width: 760px) {
+  .tk-row { grid-template-columns: 1fr; gap: 8px; padding: 12px 0; }
+}
+

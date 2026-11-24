@@ -10,7 +10,19 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <!-- Styles: base first, then shared pieces, then one file per part of the page -->
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/common.css" />
+  <link rel="stylesheet" href="css/buttons.css" />
+  <link rel="stylesheet" href="css/loader.css" />
+  <link rel="stylesheet" href="css/nav.css" />
+  <link rel="stylesheet" href="css/rail.css" />
+  <link rel="stylesheet" href="css/hero.css" />
+  <link rel="stylesheet" href="css/about.css" />
+  <link rel="stylesheet" href="css/projects.css" />
+  <link rel="stylesheet" href="css/experience.css" />
+  <link rel="stylesheet" href="css/skills.css" />
+  <link rel="stylesheet" href="css/contact.css" />
 </head>
 <body>
   <!-- Preloader: the logo assembles along its own slash -->
@@ -22,8 +34,6 @@
     <div class="loader-bar"><span></span></div>
   </div>
 
-  <div class="cursor" id="cursor" aria-hidden="true"></div>
-  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
   <canvas id="field" aria-hidden="true"></canvas>
   <canvas id="sky" aria-hidden="true"></canvas>
   <div class="grain" aria-hidden="true"></div>
@@ -89,6 +99,27 @@
         <div class="about-copy reveal" id="aboutCopy"></div>
         <div class="stats" id="stats"></div>
       </div>
+      <!-- Contact card: part of About, styled like the stat cards -->
+      <div class="contact-card reveal" id="contact">
+        <h2 class="contact-title"><span data-slot="contact.titleLine1"></span> <span class="grad" data-slot="contact.titleLine2"></span></h2>
+        <div class="contact-actions">
+          <a class="contact-mail" id="contactMail"></a>
+          <div class="socials" id="socials"></div>
+        </div>
+      </div>
+
+      <!-- Skills: part of About, under a smaller sub-heading -->
+      <div class="about-skills" id="skills">
+        <div class="section-head sub-head reveal" data-head="skills"></div>
+        <div class="toolkit tilt reveal" id="toolkit" data-glow data-tilt="3"></div>
+        <p class="tk-more reveal" data-slot="skills.more"></p>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience" class="section">
+      <div class="section-head reveal" data-head="experience"></div>
+      <div class="timeline" id="timeline"></div>
     </section>
 
     <!-- PROJECTS -->
@@ -103,50 +134,31 @@
         </div>
       </div>
     </section>
-
-    <!-- EXPERIENCE -->
-    <section id="experience" class="section">
-      <div class="section-head reveal" data-head="experience"></div>
-      <div class="timeline" id="timeline"></div>
-    </section>
-
-    <!-- SKILLS -->
-    <section id="skills" class="section band">
-      <div class="section-head reveal" data-head="skills"></div>
-      <div class="toolkit reveal" id="toolkit" data-glow></div>
-      <p class="tk-more reveal" data-slot="skills.more"></p>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" class="section contact">
-      <div class="contact-bg-logo" aria-hidden="true"><img src="assets/logo.png" alt="" /></div>
-      <h2 class="contact-title reveal"><span data-slot="contact.titleLine1"></span><br /><span class="grad" data-slot="contact.titleLine2"></span></h2>
-      <a class="contact-mail reveal" id="contactMail"></a>
-      <div class="socials reveal" id="socials"></div>
-    </section>
   </main>
 
   <footer class="footer">
     <img src="assets/logo.png" alt="" />
     <span id="footerText"></span>
-    <a href="#top" data-slot="footer.backToTop"></a>
+    <a href="#top" class="to-top"><span data-slot="footer.backToTop"></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></a>
   </footer>
 
   <!-- 1. Editable content -->
   <script src="content.js"></script>
   <!-- 2. Helpers + feature modules (each registers itself on window.App) -->
   <script src="js/utils.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/visuals.js"></script>
   <script src="js/render.js"></script>
   <script src="js/loader.js"></script>
-  <script src="js/cursor.js"></script>
   <script src="js/particles.js"></script>
+  <script src="js/shootingstar.js"></script>
   <script src="js/navigation.js"></script>
   <script src="js/rail.js"></script>
-  <script src="js/shootingstar.js"></script>
   <script src="js/terminal.js"></script>
   <script src="js/reveal.js"></script>
   <script src="js/carousel.js"></script>
   <script src="js/interactions.js"></script>
+  <script src="js/logo-secret.js"></script>
   <script src="js/orbit.js"></script>
   <!-- 3. Boot: render content, then start features -->
   <script src="js/main.js"></script>

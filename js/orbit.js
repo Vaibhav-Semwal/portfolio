@@ -8,7 +8,7 @@
 
    To change which logos orbit, edit hero.orbit in content.js. */
 (() => {
-  const { $, $$, prefs } = App.utils;
+  const { $, $$, prefs, onWidthChange } = App.utils;
 
   const PERSPECTIVE = 900; // px; must match the perspective() used for the ring line
 
@@ -38,7 +38,7 @@
     const offsets = chips.map((_, i) => (i / chips.length) * Math.PI * 2); // spread evenly
 
     let width = visual.clientWidth;
-    addEventListener("resize", () => (width = visual.clientWidth));
+    onWidthChange(() => (width = visual.clientWidth));
 
     /* ---------- Open / close ---------- */
     let open = 0;        // 0 = compact, 1 = expanded (animated)
@@ -69,7 +69,9 @@
       });
     }
 
-    function place(angle, time) {
+    let lastLine = "", lastTile = "";
+
+    function place(angle) {
       const e = easeInOut(open);
       // Slightly smaller on narrow screens so logos stay on screen.
       const fit = width < 420 ? 0.88 : 1;
@@ -81,10 +83,17 @@
       const a = rad(tiltDeg), b = rad(slantDeg);
 
       // Ring line: same transform as the maths below.
-      line.style.width = line.style.height = R * 2 + "px";
-      line.style.transform =
-        `translate(-50%, -50%) perspective(${PERSPECTIVE}px) rotateZ(${slantDeg}deg) rotateX(${tiltDeg}deg)`;
-      line.style.opacity = (0.5 + e * 0.5).toFixed(3);
+      const lineKey = `${R.toFixed(1)}|${slantDeg.toFixed(2)}|${tiltDeg.toFixed(2)}`;
+      if (lineKey !== lastLine) {
+        lastLine = lineKey;
+        line.style.width = line.style.height = R * 2 + "px";
+        line.style.transform =
+          `translate(-50%, -50%) perspective(${PERSPECTIVE}px) rotateZ(${slantDeg}deg) rotateX(${tiltDeg}deg)`;
+        line.style.opacity = (0.5 + e * 0.5).toFixed(3);
+      }
+      const tile = e.toFixed(3);
+      const tileChanged = tile !== lastTile;
+      lastTile = tile;
 
       chips.forEach((chip, i) => {
         const t = angle + offsets[i];
@@ -103,13 +112,13 @@
           `translate(-50%, -50%) translate3d(${x * p}px, ${y * p}px, 0) scale(${p * (0.75 + depth * 0.3) * chipScale})`;
         chip.style.opacity = (0.35 + depth * 0.65).toFixed(3);
         chip.style.zIndex = z > 0 ? 3 : 1; // in front of / behind the V
-        chip.style.setProperty("--tile", e.toFixed(3)); // tile fades in as the ring opens
+        if (tileChanged) chip.style.setProperty("--tile", tile); // tile fades in as the ring opens
       });
     }
 
     if (prefs.reduceMotion) {
       // No continuous motion: jump between states instead of animating.
-      const render = () => { open = wantOpen ? 1 : 0; place(0.6, 0); };
+      const render = () => { open = wantOpen ? 1 : 0; place(0.6); };
       addEventListener("mousemove", render);
       visual.addEventListener("click", render);
       render();
@@ -127,7 +136,7 @@
       tiltX += (targetX - tiltX) * 0.06;
       tiltZ += (targetZ - tiltZ) * 0.06;
       time += dt;
-      place(time * RING.speed, time);
+      place(time * RING.speed);
       if (running) requestAnimationFrame(frame);
     }
 
