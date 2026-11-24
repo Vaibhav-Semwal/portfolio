@@ -39,6 +39,13 @@
 @media (max-width: 1020px) {
   .about-grid { grid-template-columns: 1fr; gap: 40px; }
 }
+@media (max-width: 420px) {
+  .stats { gap: 10px; }
+  .stat { padding: 20px 16px; }
+  .mini { padding: 10px 9px 8px; min-height: 64px; }
+  .mini b { font-size: 20px; }
+  .mini span { font-size: 10px; }
+}
 
 /* Hover-only motion */
 @media (hover: hover) {

@@ -47,6 +47,12 @@
   .nav-contact-label { display: none; }
   .nav.scrolled { background: rgba(5, 5, 9, .92); backdrop-filter: none; -webkit-backdrop-filter: none; }
 }
+@media (max-width: 380px) {
+  .nav-brand { gap: 8px; font-size: 12px; }
+  .nav-brand .brand-mark { width: 30px; }
+  .nav-contacts { gap: 6px; }
+  .nav-contact { width: 34px; height: 34px; }
+}
 
 /* Hover-only effects */
 @media (hover: hover) {

@@ -1,4 +1,4 @@
-/* Contact card (inside About, styled like the stat cards), its buttons, and the footer. */
+/* Contact card (inside About, styled like the stat cards), the email pill, socials and the footer. */
 .contact-card {
   display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 22px 40px;
   margin-top: 14px; padding: 28px 30px; border-radius: 18px;
@@ -17,29 +17,34 @@
 }
 .contact-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 14px; }
 .contact-mail {
-  display: inline-block; font-family: var(--f-display); font-size: clamp(15px, 1.5vw, 18px);
-  padding: 13px 26px; border: 1px solid var(--line-2); border-radius: 99px;
-  transition: border-color .4s var(--ease), background-color .4s var(--ease), color .4s var(--ease);
-  word-break: break-all;
+  position: relative; overflow: hidden; isolation: isolate; display: inline-block; max-width: 100%;
+  padding: 13px 26px; border: 1px solid var(--white); border-radius: 99px;
+  background: var(--white); color: var(--black);
+  font-family: var(--f-display); font-size: clamp(15px, 1.5vw, 18px); overflow-wrap: anywhere;
+  transition: border-color .4s var(--ease), color .4s var(--ease);
 }
-.contact-mail {
-  background: var(--white); color: var(--black); border-color: var(--white);
-  position: relative; overflow: hidden; isolation: isolate;
+/* The logo gradient (navy -> purple) fades in over the white and slides on hover */
+.contact-mail::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0;
+  background: linear-gradient(110deg, var(--blue-mid), var(--indigo) 30%, var(--purple) 60%, var(--purple-hi)) 0 50% / 220% 100%;
+  transition: background-position .6s var(--ease), opacity .45s var(--ease);
 }
-.contact-mail:hover { border-color: var(--purple); }
 .socials { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 6px 24px; }
 .socials a { display: inline-block; color: var(--muted); font-size: 14px; position: relative; padding: 4px 0; transition: color .35s var(--ease); }
 .socials a::after { content: ""; position: absolute; left: 0; bottom: 0; width: 100%; height: 1px; background: var(--purple); transform: scaleX(0); transition: transform .35s var(--ease); }
-.socials a:hover { color: var(--text); }
-.socials a:hover::after { transform: scaleX(1); }
 
 @media (hover: hover) {
-  .contact-card:hover { border-color: var(--purple); }
+  .contact-card:hover, .contact-mail:hover { border-color: var(--purple); }
+  .contact-mail:hover { color: #fff; }
+  .contact-mail:hover::before { opacity: 1; background-position: 100% 50%; }
+  .socials a:hover { color: var(--text); }
+  .socials a:hover::after { transform: scaleX(1); }
 }
 @media (max-width: 760px) {
   .contact-card { grid-template-columns: 1fr; text-align: center; padding: 26px 22px; }
   .contact-actions { align-items: center; }
   .socials { justify-content: center; }
+  .contact-mail { padding: 12px 18px; font-size: 14px; }
 }
 
 .footer {

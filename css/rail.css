@@ -38,7 +38,7 @@
   color: var(--text); font-family: var(--f-display); font-size: 22px; font-weight: 600;
   letter-spacing: .04em; right: 30px; opacity: 1; transform: translate(0, -50%);
 }
-.rail:hover .rail-label, .rail.dragging .rail-label,
+.rail.dragging .rail-label,
 .rail.moving .rail-stop.active .rail-label, .rail-stop:focus-visible .rail-label { opacity: 1; transform: translate(0, -50%); }
 .rail-thumb {
   position: absolute; left: 50%; top: 0; width: 6px; height: 28px; margin: -14px 0 0 -3px; border-radius: 6px;
@@ -47,19 +47,22 @@
   transition: width .3s var(--ease), margin .3s var(--ease), box-shadow .3s;
   pointer-events: none; outline: none;
 }
-.rail:hover .rail-track::before { opacity: 1; }
-.rail:hover .rail-thumb, .rail.dragging .rail-thumb, .rail-thumb:focus-visible {
+.rail.dragging .rail-thumb, .rail-thumb:focus-visible {
   width: 10px; margin-left: -5px;
   box-shadow: 0 0 0 6px rgba(124, 51, 190, .2), 0 0 22px rgba(181, 47, 216, .75);
 }
 
 @media (max-width: 760px) {
-  .rail { right: 4px; height: min(46vh, 360px); }
+  .rail { right: 2px; width: 22px; height: min(46vh, 360px); }
   .rail-label { display: none; }
-  .rail-stop.active .rail-label { display: block; font-size: 15px; right: 22px; }
+  .rail-stop.active .rail-label { display: block; font-size: 15px; right: 20px; opacity: 0; transform: translate(6px, -50%); }
+  .rail.moving .rail-stop.active .rail-label, .rail.dragging .rail-stop.active .rail-label { opacity: 1; transform: translate(0, -50%); }
 }
 
 /* Hover-only effects */
 @media (hover: hover) {
+  .rail:hover .rail-label { opacity: 1; transform: translate(0, -50%); }
+  .rail:hover .rail-track::before { opacity: 1; }
+  .rail:hover .rail-thumb { width: 10px; margin-left: -5px; box-shadow: 0 0 0 6px rgba(124, 51, 190, .2), 0 0 22px rgba(181, 47, 216, .75); }
   .rail-stop:hover::before { border-color: var(--text); transform: rotate(45deg) scale(1.4); }
 }

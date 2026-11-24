@@ -51,7 +51,7 @@
   background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(124, 51, 190, .16), transparent 60%);
   opacity: 0; transition: opacity .4s;
 }
-[data-glow]:hover::before { opacity: 1; }
+@media (hover: hover) { [data-glow]:hover::before { opacity: 1; } }
 /* 3D tilt is mouse-only (js/interactions.js); no layers are promoted on touch screens */
 @media (hover: hover) and (pointer: fine) {
   .tilt { transform-style: preserve-3d; will-change: transform; }
@@ -96,4 +96,5 @@
 @media (max-width: 760px) {
   .band { --fade: 160px; padding-top: 180px; padding-bottom: 160px; }
   .section-head::after { display: none; }
+  .section { padding-right: calc(var(--gutter) + 12px); } /* keep text clear of the side rail */
 }

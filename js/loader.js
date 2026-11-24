@@ -27,10 +27,14 @@
     const loader = $("#loader");
     document.body.classList.add("loading");
 
+    const orbit = $("#loaderOrbit");
+    if (prefs.reduceMotion) { orbit.setCurrentTime(2); orbit.pauseAnimations(); } // still frame: ring drawn
+
     let started = false;
     const start = () => {
       if (started) return;
       started = true;
+      setTimeout(() => orbit.pauseAnimations(), 900); // stop the comet once faded out
       loader.classList.add("done");
       document.body.classList.remove("loading");
       setTimeout(() => {
@@ -41,7 +45,7 @@
       }, 150);
     };
 
-    const delay = prefs.reduceMotion ? 0 : 1300;
+    const delay = prefs.reduceMotion ? 0 : 1800; // long enough for the ring to close and the slash to flash
     if (document.readyState === "complete") setTimeout(start, delay);
     else window.addEventListener("load", () => setTimeout(start, delay));
     setTimeout(start, 4000); // safety net if an asset hangs

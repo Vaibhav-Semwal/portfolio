@@ -1,8 +1,9 @@
-/* Hero: logo with orbiting tech logos, hidden slash phrase, name, keywords, buttons. */
+/* Hero: logo with orbiting tech logos, hidden slash phrase, name, keywords, status. */
 .hero {
   min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center;
   text-align: center; padding: 84px var(--gutter) 40px; max-width: 1320px; margin: 0 auto; position: relative;
 }
+@media (max-width: 760px) { .hero { padding-right: calc(var(--gutter) + 12px); } }
 .hero-text { display: flex; flex-direction: column; align-items: center; }
 .hero-title {
   font-family: var(--f-display); font-weight: 600; letter-spacing: -.03em;
@@ -15,7 +16,7 @@
 
 /* Keyword row: AGENTIC AI / RAG SYSTEMS / ... with the logo's slash as separator */
 .hero-keys {
-  list-style: none; margin: 0 0 34px; padding: 0;
+  list-style: none; margin: 0; padding: 0;
   display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 0;
   font-family: var(--f-mono); font-size: clamp(11px, 1.1vw, 13px); letter-spacing: .14em; text-transform: uppercase;
   color: var(--muted);
@@ -25,7 +26,6 @@
   content: "/"; color: var(--purple); margin: 0 14px; font-weight: 500;
   display: inline-block; transform: skewX(-12deg);
 }
-.hero-cta { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
 .hero .eyebrow { margin-top: 26px; }
 
 .hero-visual {

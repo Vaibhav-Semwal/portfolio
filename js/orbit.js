@@ -125,9 +125,11 @@
       return;
     }
 
-    let time = 0, last = performance.now(), running = false;
+    let time = 0, last = performance.now(), running = false, skip = false;
+    const lite = !prefs.finePointer; // phones: every other frame, like the particles
 
     function frame(now) {
+      if (lite && (skip = !skip)) { if (running) requestAnimationFrame(frame); return; }
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       // Frame-rate independent easing toward the target state.

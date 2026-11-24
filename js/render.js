@@ -47,13 +47,7 @@
 
   function hero(c) {
     const hr = c.hero;
-    const setCta = (el, cta) => {
-      el.href = cta.href;
-      el.querySelector("span").textContent = cta.label;
-    };
     $("#heroKeys").replaceChildren(...(hr.keywords || []).map((k) => h("li", { text: k })));
-    setCta($("#ctaPrimary"), hr.primaryCta);
-    setCta($("#ctaSecondary"), hr.secondaryCta);
     // One ring line (the faint ellipse) + one chip per logo. js/orbit.js animates them.
     $("#orbit3d").replaceChildren(
       h("div", { class: "ring" }),
@@ -66,7 +60,8 @@
   function about(c) {
     const a = c.about;
     $("#aboutCopy").replaceChildren(
-      h("p", { class: "lead", html: format(a.lead) }),
+      // lead can be one string or a list of lines; each line is its own label.
+      ...[].concat(a.lead || []).map((l) => h("p", { class: "lead", html: format(l) })),
       ...a.paragraphs.map((p) => h("p", { html: format(p) }))
     );
     $("#stats").replaceChildren(

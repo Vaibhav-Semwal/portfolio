@@ -38,10 +38,15 @@
 .carousel-btn:disabled { opacity: .3; }
 .carousel-dots { display: flex; gap: 8px; flex: 1; }
 .carousel-dots button {
-  width: 22px; height: 4px; border-radius: 4px; border: 0; padding: 0;
-  background: var(--line-2); transition: width .4s var(--ease), background .3s;
+  position: relative; width: 22px; height: 24px; border: 0; padding: 0; background: none;
+  transition: width .4s var(--ease);
 }
-.carousel-dots button.active { width: 48px; background: var(--purple); }
+.carousel-dots button::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 4px; margin-top: -2px;
+  border-radius: 4px; background: var(--line-2); transition: background .3s;
+}
+.carousel-dots button.active { width: 48px; }
+.carousel-dots button.active::before { background: var(--purple); }
 
 /* Visuals for projects without a terminal/paper mock-up */
 .shot { height: 100%; border-radius: 14px; overflow: hidden; border: 1px solid var(--line-2); box-shadow: 0 30px 60px rgba(0,0,0,.5); }
@@ -135,6 +140,7 @@
 
 @media (max-width: 760px) {
   .project { flex-basis: 82%; }
+  .carousel-btn { width: 44px; height: 44px; }
   .paper { inset: 10px 8px; }
 }
 

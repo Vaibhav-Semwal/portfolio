@@ -46,8 +46,6 @@ window.CONTENT = {
     lastName: "SEMWAL",
     // Short keywords shown under the name, separated by slashes.
     keywords: ["Delhi, IN", "Agentic AI", "RAG Systems", "Full-Stack", "Game Dev"],
-    primaryCta: { label: "See my work", href: "#projects" },
-    secondaryCta: { label: "Say hello", href: "mailto:vaibhavsemwalxii@gmail.com" },
     // Tech logos on the 3D ring around the hero logo. The ring sits compact
     // around the logo and opens out when hovered (tapped on touch screens).
     // icon: an image file in assets/icons/. Around 16 is the comfortable maximum.
@@ -74,8 +72,8 @@ window.CONTENT = {
   about: {
     title: "About",
     accent: "me",
-    lead:
-      "CS Engineer and Game Developerㅤㅤㅤ**1 year of experience.**",
+    // Each line here shows as its own heading label.
+    lead: ["CS Engineer and Game Developer", "**1 year of experience.**"],
     paragraphs: [
       "I have worked in multiple languages such as Python, JS, Java and C# with various different frameworks with hands on experience with the modern Gen-AI stack. Building RAG and agentic end-to-end systems, from vector retrieval design and prompt/agent architecture all the way to production deployment.",
       "My background in scalable, RPC client-server architecture means I bring the same systems discipline (__modularity, performance, reliability__) to AI application design.",

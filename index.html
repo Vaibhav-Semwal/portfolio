@@ -13,7 +13,6 @@
   <!-- Styles: base first, then shared pieces, then one file per part of the page -->
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/common.css" />
-  <link rel="stylesheet" href="css/buttons.css" />
   <link rel="stylesheet" href="css/loader.css" />
   <link rel="stylesheet" href="css/nav.css" />
   <link rel="stylesheet" href="css/rail.css" />
@@ -25,13 +24,33 @@
   <link rel="stylesheet" href="css/contact.css" />
 </head>
 <body>
-  <!-- Preloader: the logo assembles along its own slash -->
+  <!-- Preloader: the logo's halves pull together over a nebula and an orbit ring draws itself round them -->
   <div class="loader" id="loader" aria-hidden="true">
-    <div class="loader-logo">
-      <img src="assets/logo.png" alt="" class="half half-top" />
-      <img src="assets/logo.png" alt="" class="half half-bot" />
+    <div class="loader-nebula"></div>
+    <div class="loader-core">
+      <svg class="loader-orbit" id="loaderOrbit" viewBox="0 0 300 120">
+        <defs>
+          <radialGradient id="cometGlow">
+            <stop offset="0" stop-color="#fff" />
+            <stop offset=".35" stop-color="#b52fd8" stop-opacity=".8" />
+            <stop offset="1" stop-color="#7c33be" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+        <g transform="rotate(-19.3 150 60)">
+          <path id="orbitPath" class="orbit-line" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" d="M10 60 A140 34 0 1 1 290 60 A140 34 0 1 1 10 60" />
+          <circle class="orbit-comet" r="9" fill="url(#cometGlow)">
+            <animateMotion id="cometIn" dur="1.4s" begin="0.15s" fill="freeze" calcMode="spline" keyTimes="0;1" keyPoints="0;1" keySplines=".2 .8 .2 1"><mpath href="#orbitPath" /></animateMotion>
+            <animateMotion dur="2.6s" begin="cometIn.end" repeatCount="indefinite"><mpath href="#orbitPath" /></animateMotion>
+          </circle>
+          <animate href="#orbitPath" attributeName="stroke-dashoffset" from="1" to="0" dur="1.4s" begin="0.15s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines=".2 .8 .2 1" />
+        </g>
+      </svg>
+      <div class="loader-logo">
+        <img src="assets/logo.png" alt="" class="half half-top" />
+        <img src="assets/logo.png" alt="" class="half half-bot" />
+        <span class="loader-flash"></span>
+      </div>
     </div>
-    <div class="loader-bar"><span></span></div>
   </div>
 
   <canvas id="field" aria-hidden="true"></canvas>
@@ -81,10 +100,6 @@
           <span class="line"><span class="word grad" data-scramble data-slot="hero.lastName"></span></span>
         </h1>
         <ul class="hero-keys reveal" id="heroKeys"></ul>
-        <div class="hero-cta reveal">
-          <a class="btn btn-primary" id="ctaPrimary"><span></span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <a class="btn btn-light" id="ctaSecondary"><span></span></a>
-        </div>
         <p class="eyebrow reveal"><span class="pulse"></span><span data-slot="hero.status"></span></p>
       </div>
 
