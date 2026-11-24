@@ -25,17 +25,25 @@
   <div class="cursor" id="cursor" aria-hidden="true"></div>
   <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
   <canvas id="field" aria-hidden="true"></canvas>
+  <canvas id="sky" aria-hidden="true"></canvas>
   <div class="grain" aria-hidden="true"></div>
-  <div class="progress" id="progress" aria-hidden="true"></div>
 
   <header class="nav" id="nav">
     <a href="#top" class="nav-brand" id="brand">
       <img src="assets/logo.png" alt="" />
       <span data-slot="brand"></span>
     </a>
-    <nav class="nav-links" id="navLinks"></nav>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span></button>
+    <div class="nav-contacts" id="navContacts"></div>
   </header>
+
+  <!-- Side scroll slider: drag the thumb or click a stop (filled by js/render.js, driven by js/rail.js) -->
+  <nav class="rail" id="rail" aria-label="Sections">
+    <div class="rail-track" id="railTrack">
+      <div class="rail-fill" id="railFill"></div>
+      <div class="rail-stops" id="railStops"></div>
+      <div class="rail-thumb" id="railThumb" role="slider" tabindex="0" aria-label="Page position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+    </div>
+  </nav>
 
   <main id="top">
     <!-- HERO -->
@@ -47,6 +55,8 @@
         <div class="logo-glow"></div>
         <div class="logo-float">
           <div class="logo-stage" id="logoStage">
+            <!-- Hidden phrase in the slash: shows when the halves split on hover / tap -->
+            <span class="logo-secret" id="logoSecret"></span>
             <img src="assets/logo.png" alt="" class="logo-main half-top" id="heroLogo" />
             <img src="assets/logo.png" alt="" class="logo-main half-bot" />
             <div class="slash-flash"></div>
@@ -62,8 +72,8 @@
         </h1>
         <ul class="hero-keys reveal" id="heroKeys"></ul>
         <div class="hero-cta reveal">
-          <a class="btn btn-primary magnetic" id="ctaPrimary"><span></span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <a class="btn btn-light magnetic" id="ctaSecondary"><span></span></a>
+          <a class="btn btn-primary" id="ctaPrimary"><span></span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-light" id="ctaSecondary"><span></span></a>
         </div>
         <p class="eyebrow reveal"><span class="pulse"></span><span data-slot="hero.status"></span></p>
       </div>
@@ -111,7 +121,7 @@
     <section id="contact" class="section contact">
       <div class="contact-bg-logo" aria-hidden="true"><img src="assets/logo.png" alt="" /></div>
       <h2 class="contact-title reveal"><span data-slot="contact.titleLine1"></span><br /><span class="grad" data-slot="contact.titleLine2"></span></h2>
-      <a class="contact-mail magnetic reveal" id="contactMail"></a>
+      <a class="contact-mail reveal" id="contactMail"></a>
       <div class="socials reveal" id="socials"></div>
     </section>
   </main>
@@ -131,6 +141,8 @@
   <script src="js/cursor.js"></script>
   <script src="js/particles.js"></script>
   <script src="js/navigation.js"></script>
+  <script src="js/rail.js"></script>
+  <script src="js/shootingstar.js"></script>
   <script src="js/terminal.js"></script>
   <script src="js/reveal.js"></script>
   <script src="js/carousel.js"></script>

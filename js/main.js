@@ -12,6 +12,8 @@
   App.cursor.init();
   App.particles.init();
   App.navigation.init();
+  App.rail.init();
+  App.shootingStar.init();
   App.reveal.init();
   App.carousel.init();
   App.interactions.init();

@@ -1,4 +1,4 @@
-/* Pointer-driven effects: 3D card tilt + glow, magnetic buttons, hero logo parallax. */
+/* Pointer-driven effects: 3D card tilt + glow, hero logo parallax, hidden logo phrase. */
 (() => {
   const { $, $$, prefs } = App.utils;
 
@@ -20,41 +20,6 @@
     });
   }
 
-  /* Magnetic buttons: the element eases toward the pointer while hovered and
-     springs back to rest on leave. Driven by requestAnimationFrame (not CSS
-     transitions) so there is never a jump, however fast the pointer moves. */
-  function magnetic() {
-    const PULL_X = 0.25, PULL_Y = 0.35; // how far the element follows the pointer
-    const EASE = 0.15;                  // 0..1, higher = snappier
-
-    $$(".magnetic").forEach((el) => {
-      let tx = 0, ty = 0;   // target offset
-      let cx = 0, cy = 0;   // current offset
-      let running = false;
-
-      const step = () => {
-        cx += (tx - cx) * EASE;
-        cy += (ty - cy) * EASE;
-        const settled = Math.abs(tx - cx) < 0.05 && Math.abs(ty - cy) < 0.05;
-        if (settled) { cx = tx; cy = ty; }
-        el.style.transform = cx || cy ? `translate3d(${cx}px, ${cy}px, 0)` : "";
-        if (settled) running = false;
-        else requestAnimationFrame(step);
-      };
-      const kick = () => { if (!running) { running = true; requestAnimationFrame(step); } };
-
-      el.addEventListener("mousemove", (e) => {
-        const r = el.getBoundingClientRect();
-        // Measure from the resting centre (subtract the current offset) so the
-        // element does not chase its own movement.
-        tx = (e.clientX - (r.left - cx) - r.width / 2) * PULL_X;
-        ty = (e.clientY - (r.top - cy) - r.height / 2) * PULL_Y;
-        kick();
-      });
-      el.addEventListener("mouseleave", () => { tx = 0; ty = 0; kick(); });
-    });
-  }
-
   function logoParallax() {
     const stage = $("#logoStage");
     addEventListener("mousemove", (e) => {
@@ -64,10 +29,47 @@
     });
   }
 
+  /* Hidden phrase in the logo's slash, picked at random from content.hero.secrets.
+     Every time the V closes, the next phrase is swapped in once the text has faded out,
+     so each opening shows a new one. Mouse opens it on hover; touch opens it with a tap. */
+  const SECRET_FADE = 350; // ms: matches the text's fade-out in styles.css
+  function logoSecret() {
+    const stage = $("#logoStage"), el = $("#logoSecret");
+    const list = [].concat((window.CONTENT.hero || {}).secrets || []).filter(Boolean);
+
+    let current = -1, hovering = false, swapTimer;
+    const pick = () => {
+      if (list.length < 2) return 0;
+      let i;
+      do i = (Math.random() * list.length) | 0; while (i === current);
+      return i;
+    };
+    const show = (i) => { current = i; el.textContent = list[i] || ""; };
+    const isOpen = () => hovering || stage.classList.contains("open");
+    const closed = () => {
+      clearTimeout(swapTimer);
+      swapTimer = setTimeout(() => { if (!isOpen()) show(pick()); }, SECRET_FADE);
+    };
+
+    stage.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") { hovering = true; stage.classList.add("hover"); } });
+    stage.addEventListener("pointerleave", (e) => {
+      if (e.pointerType !== "mouse") return;
+      hovering = false;
+      stage.classList.remove("hover");
+      closed();
+    });
+    stage.addEventListener("click", (e) => {
+      if (e.pointerType === "mouse") return; // mouse users already opened it by hovering
+      if (!stage.classList.toggle("open")) closed();
+    });
+
+    show(pick());
+  }
+
   function init() {
+    logoSecret();
     if (!prefs.finePointer || prefs.reduceMotion) return;
     tilt();
-    magnetic();
     logoParallax();
   }
 

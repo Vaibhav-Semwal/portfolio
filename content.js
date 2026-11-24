@@ -32,6 +32,16 @@ window.CONTENT = {
 
   hero: {
     status: "Open to Work",
+    // Hidden inside the logo's slash; revealed when the logo splits on hover / tap.
+    // A different one is picked at random each time the logo opens.
+    secrets: [
+      "change is the only constant",
+      "stay curious",
+      "ship it, then make it better",
+      "every bug is a lesson",
+      "build things that matter",
+      "keep moving forward",
+    ],
     firstName: "VAIBHAV",
     lastName: "SEMWAL",
     // Short keywords shown under the name, separated by slashes.
